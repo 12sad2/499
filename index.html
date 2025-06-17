@@ -49,6 +49,25 @@
   <div id="result"></div>
 
   <script>
+    
+    document.addEventListener("contextmenu", function(e) {
+      e.preventDefault();
+      alert("ممنوع استخدام كليك يمين.");
+      window.location.href = "https://www.google.com";
+    });
+
+    
+    document.addEventListener("keydown", function(e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "i") ||
+        (e.ctrlKey && e.key.toLowerCase() === "u")
+      ) {
+        alert("محاولة كشف الكود مرفوضة.");
+        window.location.href = "https://www.google.com";
+      }
+    });
+
     async function checkToken() {
       const token = document.getElementById('tokenInput').value.trim();
       const resultDiv = document.getElementById('result');
