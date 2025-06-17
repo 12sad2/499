@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>فحص توكن بوت</title>
+  <title>موقع محمي</title>
   <style>
     body {
       background-color: #007BFF;
@@ -10,6 +10,7 @@
       color: white;
       text-align: center;
       padding: 50px;
+      user-select: none;
     }
     h1 {
       font-size: 48px;
@@ -50,24 +51,32 @@
 
   <script>
     
-    document.addEventListener("contextmenu", function(e) {
+
+    
+    document.addEventListener("contextmenu", e => {
       e.preventDefault();
-      alert("ممنوع استخدام كليك يمين.");
-      window.location.href = "https://www.google.com";
+      alert("🚫 غير مسموح!");
+      window.location.href = "https://google.com";
     });
 
     
-    document.addEventListener("keydown", function(e) {
+    document.addEventListener("keydown", function (e) {
       if (
         e.key === "F12" ||
-        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "i") ||
-        (e.ctrlKey && e.key.toLowerCase() === "u")
+        (e.ctrlKey && e.shiftKey && ["i", "j", "c"].includes(e.key.toLowerCase())) ||
+        (e.ctrlKey && ["u", "s"].includes(e.key.toLowerCase()))
       ) {
-        alert("محاولة كشف الكود مرفوضة.");
-        window.location.href = "https://www.google.com";
+        alert("🚫 ممنوع الوصول إلى الكود.");
+        e.preventDefault();
+        window.location.href = "https://google.com";
       }
     });
 
+    
+    document.addEventListener("dragstart", e => e.preventDefault());
+    document.addEventListener("selectstart", e => e.preventDefault());
+
+    
     async function checkToken() {
       const token = document.getElementById('tokenInput').value.trim();
       const resultDiv = document.getElementById('result');
