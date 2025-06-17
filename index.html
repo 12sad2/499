@@ -52,15 +52,17 @@
   </div>
 
   <script>
-    // كشف إذا تم فتح الملف من الكمبيوتر وليس من الإنترنت
+    // ✅ إذا تم فتح الملف من الجهاز مباشرة، نمسح كل شيء
     if (location.protocol === "file:") {
-      document.body.innerHTML = `
-        <h1 style="color:red; font-size: 40px;">🚫 لا يمكنك سرقة الكود</h1>
-        <p style="font-size: 20px;">تم الكشف أنك تحاول فتح الملف من جهازك مباشرة.</p>
+      document.documentElement.innerHTML = `
+        <body style="background-color: black; color: red; text-align: center; padding: 100px;">
+          <h1 style="font-size: 40px;">🚫 لا يمكنك سرقة الكود</h1>
+          <p style="font-size: 20px;">تم اكتشاف أنك فتحت الملف من جهازك بعد تحميله.</p>
+        </body>
       `;
     }
 
-    // حماية عادية
+    // 🛡️ حماية إضافية (منع فحص، منع حفظ...)
     document.addEventListener("contextmenu", e => {
       e.preventDefault();
       alert("🚫 غير مسموح!");
@@ -82,6 +84,7 @@
     document.addEventListener("dragstart", e => e.preventDefault());
     document.addEventListener("selectstart", e => e.preventDefault());
 
+    // 🚀 فحص التوكن
     async function checkToken() {
       const token = document.getElementById('tokenInput').value.trim();
       const resultDiv = document.getElementById('result');
