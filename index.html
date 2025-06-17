@@ -3,12 +3,57 @@
 <head>
 <meta charset="UTF-8" />
 <title>موقع فحص توكنات بوت : 497</title>
-<style>body{background:#007BFF;color:#fff;font-family:Tahoma,sans-serif;text-align:center;padding:50px;user-select:none}h1{font-size:48px;margin-bottom:40px}input,button{padding:10px;font-size:18px;margin:10px;border:none;border-radius:8px}input{width:300px}button{background:#0056b3;color:#fff;cursor:pointer}#result{margin-top:30px;background:rgba(255,255,255,0.1);padding:20px;border-radius:10px;direction:ltr;text-align:left}</style>
+<style>
+  body {
+    background: #007BFF;
+    color: #fff;
+    font-family: Tahoma, sans-serif;
+    text-align: center;
+    padding: 50px;
+    user-select: none;
+  }
+  h1 {
+    font-size: 48px;
+    margin-bottom: 40px;
+    color: transparent; /* أخفي النص العربي */
+    text-shadow: 0 0 5px rgba(255,255,255,0.2); /* ظل خفيف لتلميح */
+  }
+  label {
+    display: block;
+    margin-bottom: 10px;
+    color: transparent; /* أخفي النص */
+    text-shadow: 0 0 3px rgba(255,255,255,0.2);
+  }
+  input, button {
+    padding: 10px;
+    font-size: 18px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+  }
+  input {
+    width: 300px;
+  }
+  button {
+    background: #0056b3;
+    color: #fff;
+    cursor: pointer;
+  }
+  #result {
+    margin-top: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    direction: ltr;
+    text-align: left;
+    color: #fff;
+  }
+</style>
 </head>
 <body>
 <div id="mainContent">
   <h1>موقع فحص توكنات بوت : 497</h1>
-  <label>قم بوضع توكن بوتك :</label><br />
+  <label>قم بوضع توكن بوتك :</label>
   <input type="text" id="tokenInput" placeholder="توكن البوت هنا" />
   <button id="checkBtn">فحص</button>
   <div id="result"></div>
@@ -20,13 +65,13 @@
     return;
   }
 
-  document.addEventListener("contextmenu",function(e){
+  document.addEventListener("contextmenu", function(e){
     e.preventDefault();
     alert("🚫 غير مسموح!");
     window.location.href="https://google.com";
   });
 
-  document.addEventListener("keydown",function(e){
+  document.addEventListener("keydown", function(e){
     if(e.key === "F12" || (e.ctrlKey && e.shiftKey && ["I","J","C"].includes(e.key.toUpperCase())) || (e.ctrlKey && ["U","S"].includes(e.key.toUpperCase()))){
       alert("🚫 ممنوع الوصول إلى الكود.");
       e.preventDefault();
