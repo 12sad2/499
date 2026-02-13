@@ -1,53 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>جلب نصف التوكن</title>
-  <style>
-    body {
-      background: #111;
-      color: #0f0;
-      font-family: monospace;
-      text-align: center;
-      padding-top: 100px;
-    }
-    input, button {
-      padding: 10px;
-      font-size: 18px;
-      margin-top: 10px;
-      background: #222;
-      color: #0f0;
-      border: 1px solid #0f0;
-    }
-    .result {
-      margin-top: 30px;
-      font-size: 20px;
-      color: #0f0;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>صاحب الموقع تائب</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background:
+        linear-gradient(rgba(200,0,0,0.75), rgba(200,0,0,0.75)),
+        url("bg.jpg.jfif") no-repeat center center fixed;
+    background-size: cover;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+.text {
+    color: white;
+    font-size: 60px;
+    font-weight: bold;
+    text-shadow: 0 0 20px black;
+    margin-bottom: 30px;
+}
+
+button {
+    background: darkred;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 22px;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0 0 15px black;
+}
+
+button:hover {
+    background: red;
+}
+</style>
 </head>
+
 <body>
 
-  <h1>جلب التوكن</h1>
-  <p>قم بوضع ايدي الشخص:</p>
+<div class="text">صاحب الموقع تائب</div>
 
-  <input type="text" id="discordId" placeholder="مثال: 1392610763092267120"><br>
-  <button onclick="getTokenPart()">جلب</button>
+<button onclick="playSound()">تشغيل الصوت </button>
 
-  <div class="result" id="result"></div>
+<audio id="enterSound">
+    <source src="sound.mp3" type="audio/mpeg">
+</audio>
 
-  <script>
-    function getTokenPart() {
-      const id = document.getElementById("discordId").value.trim();
-      if (!id || isNaN(id)) {
-        document.getElementById("result").innerText = "❌ أدخل ID رقمي صحيح.";
-        return;
-      }
-
-      const encoded = btoa(id); // Base64 encode
-      document.getElementById("result").innerText = "🔓 Token Part 1:\n" + encoded;
-    }
-  </script>
+<script>
+function playSound(){
+    document.getElementById("enterSound").play();
+}
+</script>
 
 </body>
 </html>
